@@ -38,10 +38,9 @@ public class TestApp {
 			List<Station> liststations = listStationsBycustomer.get(key);
 			char stationStart = ' ';
 			char stationEnd = ' ';
-			
 			char zoneStart = ' ';
 			char zoneEnd = ' ';
-			
+
 			for (int i = 0; i < liststations.size(); i++) {
 
 				if (isStationStartSetted && !isStationEndSetted) {
@@ -53,11 +52,14 @@ public class TestApp {
 					isStationStartSetted = true;
 				}
 				if (isStationStartSetted && isStationEndSetted) {
-					
+                    //get the Zone
 					zoneStart = getZoneFromStation(stationStart, stationEnd);
 					zoneEnd = getZoneFromStation(stationEnd, stationStart);
+
+					//get the price of the trip
 					
-					Trip t = new Trip(key, stationStart, stationEnd,zoneStart,zoneEnd);
+					
+					Trip t = new Trip(key, stationStart, stationEnd, zoneStart, zoneEnd);
 					listTrips.add(t);
 					isStationStartSetted = false;
 					isStationEndSetted = false;
@@ -65,8 +67,6 @@ public class TestApp {
 			}
 		}
 		Map<Integer, List<Trip>> listtrips = listTrips.stream().collect(Collectors.groupingBy(Trip::getCustumerId));
-int a =0;
-a++;
 	}
 
 	// construct list customers
@@ -84,7 +84,7 @@ a++;
 	}
 
 	// get all customers stations
-	
+
 	// get list of all stations
 	private static List<Station> getAllStationsInformations(File text) throws FileNotFoundException {
 		List<Station> listStations = new ArrayList<Station>();
@@ -119,7 +119,7 @@ a++;
 
 	}
 
-	//get the zone from the station
+	// get the zone from the station
 	private static char getZoneFromStation(char station, char stationEndPoint) {
 		switch (station) {
 		case 'A':
@@ -138,18 +138,29 @@ a++;
 			return getZone(station, stationEndPoint);
 		}
 	}
+
 	private static char getZone(char station, char stationEndPoint) {
-//		char[] zone3 = {'C','E','F','G','H','I'};
-//		char[] zone2 = {'D','A','B'};
-		String zone3 = "CEFGHI"; //Stations C,E and F are considered in zone 3 for constraints of pricing
-		String zone2 = "DAB";
-		if(zone3.contains(String.valueOf(stationEndPoint))){
+		
+		String zone1_2 = "ABD";
+		String zone3 = "CEF"; // Stations C,E and F are considered in zone 3 for constraints of pricing
+		String zone4 = "GHI";
+
+		if (zone4.contains(String.valueOf(stationEndPoint)) && String.valueOf(station).equals("F")) {
+			return '4';
+		}
+		if (zone4.contains(String.valueOf(stationEndPoint)) && !String.valueOf(station).equals("F")) {
 			return '3';
 		}
-		if(zone2.contains(String.valueOf(stationEndPoint))){
+		if (zone1_2.contains(String.valueOf(stationEndPoint)) && !String.valueOf(station).equals("F")) {
 			return '2';
 		}
+		if (zone1_2.contains(String.valueOf(stationEndPoint)) && String.valueOf(station).equals("F")) {
+			return '3';
+		}
+		if (zone3.contains(String.valueOf(stationEndPoint))) {
+			return '3';
+		}
 		
-		return '?';
+		 return '?'; //for the testing to know is there is a condition not treated
 	}
 }
