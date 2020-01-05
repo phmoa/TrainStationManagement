@@ -27,6 +27,12 @@ public class Customer {
 	}
 
 	
+	public Customer(int customerId, List<Trip> trips) {
+		super();
+		this.customerId = customerId;
+		this.trips = trips;
+	}
+
 	//getters & setters
 	public int getCustomerId() {
 		return customerId;

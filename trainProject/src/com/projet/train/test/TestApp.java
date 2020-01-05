@@ -1,8 +1,8 @@
 package com.projet.train.test;
 
-import java.awt.Choice;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.projet.train.entities.Customer;
 import com.projet.train.entities.Station;
 import com.projet.train.entities.Trip;
+import com.projet.train.entities.Zone;
 
 public class TestApp {
 
@@ -24,13 +25,62 @@ public class TestApp {
 
 		// Verification input (mod2) a devlopper
 
-		List<Customer> listCustumers = getAllCustomers(text);
+		// List<Customer> listCustumers = getAllCustomers(text);
 		List<Station> listStations = getAllStationsInformations(text);
 
-		List<Trip> listTrips = new ArrayList<Trip>();
-		Map<Integer, List<Station>> listStationsBycustomer = getStationsByCustomer(listStations);
-		// construct all trips by custumer
+		if (listStations != null) {
+			Map<Integer, List<Station>> listStationsBycustomer = getStationsByCustomer(listStations);
+			if (listStationsBycustomer != null) {
+				Map<Integer, List<Trip>> listtrips = getListTripsByCustomer(listStationsBycustomer);
 
+				List<Customer> listCustumers = new ArrayList<Customer>();
+				List<Trip> listTrip = new ArrayList<Trip>();
+				Set<Integer> keyCustomer = listtrips.keySet();
+				for (int key : keyCustomer) {
+					Customer c = new Customer(key, listTrip);
+					int costTotal = 0;
+					List<Trip> listTrips = listtrips.get(key);
+					for (Trip t : listTrips) {
+						c.getTrips().add(t);
+						costTotal = costTotal + t.getConstInCents();
+					}
+					c.setTotalConstInCents(costTotal);
+					
+					
+					
+					
+
+
+				}
+
+			}
+		}
+	
+	
+	
+	
+	
+	
+	
+ 
+		// try-with-resources statement based on post comment below :)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	}
+
+	// contruct list customer for the output
+
+	// construct list trips by customer
+	private static Map<Integer, List<Trip>> getListTripsByCustomer(Map<Integer, List<Station>> listStationsBycustomer) {
+
+		List<Trip> listTrips = new ArrayList<Trip>();
 		boolean isStationStartSetted = false;
 		boolean isStationEndSetted = false;
 		Set<Integer> keyCustomer = listStationsBycustomer.keySet();
@@ -40,6 +90,7 @@ public class TestApp {
 			char stationEnd = ' ';
 			char zoneStart = ' ';
 			char zoneEnd = ' ';
+			int tripCost = 0;
 
 			for (int i = 0; i < liststations.size(); i++) {
 
@@ -52,21 +103,22 @@ public class TestApp {
 					isStationStartSetted = true;
 				}
 				if (isStationStartSetted && isStationEndSetted) {
-                    //get the Zone
+					// get the Zone
 					zoneStart = getZoneFromStation(stationStart, stationEnd);
 					zoneEnd = getZoneFromStation(stationEnd, stationStart);
 
-					//get the price of the trip
-					
-					
-					Trip t = new Trip(key, stationStart, stationEnd, zoneStart, zoneEnd);
+					// get the price of the trip
+					tripCost = getTripCost(zoneStart, zoneEnd);
+
+					Trip t = new Trip(key, stationStart, stationEnd, tripCost, zoneStart, zoneEnd);
 					listTrips.add(t);
 					isStationStartSetted = false;
 					isStationEndSetted = false;
 				}
 			}
 		}
-		Map<Integer, List<Trip>> listtrips = listTrips.stream().collect(Collectors.groupingBy(Trip::getCustumerId));
+		return listTrips.stream().collect(Collectors.groupingBy(Trip::getCustumerId));
+
 	}
 
 	// construct list customers
@@ -82,8 +134,6 @@ public class TestApp {
 		}
 		return listCustumers;
 	}
-
-	// get all customers stations
 
 	// get list of all stations
 	private static List<Station> getAllStationsInformations(File text) throws FileNotFoundException {
@@ -140,7 +190,7 @@ public class TestApp {
 	}
 
 	private static char getZone(char station, char stationEndPoint) {
-		
+
 		String zone1_2 = "ABD";
 		String zone3 = "CEF"; // Stations C,E and F are considered in zone 3 for constraints of pricing
 		String zone4 = "GHI";
@@ -160,7 +210,32 @@ public class TestApp {
 		if (zone3.contains(String.valueOf(stationEndPoint))) {
 			return '3';
 		}
-		
-		 return '?'; //for the testing to know is there is a condition not treated
+
+		return '?'; // for the testing to know is there is a condition not treated
+	}
+
+	// get the price of the trip
+	private static int getTripCost(char zoneStart, char zoneEnd) {
+
+		String zone1_2 = "12";
+		String zone3_4 = "34";
+		String zone3 = "3";
+		String zone4 = "4";
+
+		if (zone1_2.contains(String.valueOf(zoneStart)) && zone1_2.contains(String.valueOf(zoneEnd))) {
+			return 240;
+		}
+		if (zone3_4.contains(String.valueOf(zoneStart)) && zone3_4.contains(String.valueOf(zoneEnd))) {
+			return 200;
+		}
+		if ((zone1_2.contains(String.valueOf(zoneStart)) && zone3.contains(String.valueOf(zoneEnd)))
+				|| (zone3.contains(String.valueOf(zoneStart)) && zone1_2.contains(String.valueOf(zoneEnd)))) {
+			return 280;
+		}
+		if ((zone1_2.contains(String.valueOf(zoneStart)) && zone4.contains(String.valueOf(zoneEnd)))
+				|| (zone4.contains(String.valueOf(zoneStart)) && zone1_2.contains(String.valueOf(zoneEnd)))) {
+			return 300;
+		}
+		return 0;
 	}
 }
