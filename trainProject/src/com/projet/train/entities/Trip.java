@@ -8,8 +8,8 @@ public class Trip {
 	char stationEnd;
 	String startedJourneyAt;//convertir vers type date !!!!!
 	int constInCents;
-	String zoneFrom;
-	String zoneTo;
+	char zoneFrom;
+	char zoneTo;
 
 	
 	//constructors
@@ -29,11 +29,23 @@ public class Trip {
 		this.custumerId = custumerId;
 		this.stationStart = stationStart;
 		this.stationEnd = stationEnd;
+	}
+	
 
+
+	public Trip(int custumerId, char stationStart, char stationEnd, char zoneFrom, char zoneTo) {
+		super();
+		this.custumerId = custumerId;
+		this.stationStart = stationStart;
+		this.stationEnd = stationEnd;
+		this.zoneFrom = zoneFrom;
+		this.zoneTo = zoneTo;
 	}
 
+
+
 	public Trip(int custumerId, char stationStart, char stationEnd, String startedJourneyAt, int constInCents,
-			String zoneFrom, String zoneTo) {
+			char zoneFrom, char zoneTo) {
 		super();
 		this.custumerId = custumerId;
 		this.stationStart = stationStart;
@@ -87,19 +99,19 @@ public class Trip {
 		this.constInCents = constInCents;
 	}
 
-	public String getZoneFrom() {
+	public char getZoneFrom() {
 		return zoneFrom;
 	}
 
-	public void setZoneFrom(String zoneFrom) {
+	public void setZoneFrom(char zoneFrom) {
 		this.zoneFrom = zoneFrom;
 	}
 
-	public String getZoneTo() {
+	public char getZoneTo() {
 		return zoneTo;
 	}
 
-	public void setZoneTo(String zoneTo) {
+	public void setZoneTo(char zoneTo) {
 		this.zoneTo = zoneTo;
 	}
 	

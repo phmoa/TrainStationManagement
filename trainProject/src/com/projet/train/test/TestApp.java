@@ -38,18 +38,26 @@ public class TestApp {
 			List<Station> liststations = listStationsBycustomer.get(key);
 			char stationStart = ' ';
 			char stationEnd = ' ';
+			
+			char zoneStart = ' ';
+			char zoneEnd = ' ';
+			
 			for (int i = 0; i < liststations.size(); i++) {
 
 				if (isStationStartSetted && !isStationEndSetted) {
-					stationStart = liststations.get(i).getIdStation();
+					stationEnd = liststations.get(i).getIdStation();
 					isStationEndSetted = true;
 				}
 				if (!isStationStartSetted && !isStationEndSetted) {
-					stationEnd = liststations.get(i).getIdStation();
+					stationStart = liststations.get(i).getIdStation();
 					isStationStartSetted = true;
 				}
 				if (isStationStartSetted && isStationEndSetted) {
-					Trip t = new Trip(key, stationStart, stationEnd);
+					
+					zoneStart = getZoneFromStation(stationStart, stationEnd);
+					zoneEnd = getZoneFromStation(stationEnd, stationStart);
+					
+					Trip t = new Trip(key, stationStart, stationEnd,zoneStart,zoneEnd);
 					listTrips.add(t);
 					isStationStartSetted = false;
 					isStationEndSetted = false;
@@ -57,7 +65,8 @@ public class TestApp {
 			}
 		}
 		Map<Integer, List<Trip>> listtrips = listTrips.stream().collect(Collectors.groupingBy(Trip::getCustumerId));
-
+int a =0;
+a++;
 	}
 
 	// construct list customers
@@ -110,5 +119,37 @@ public class TestApp {
 
 	}
 
-	// get stations By Zone
+	//get the zone from the station
+	private static char getZoneFromStation(char station, char stationEndPoint) {
+		switch (station) {
+		case 'A':
+			return '1';
+		case 'B':
+			return '1';
+		case 'D':
+			return '2';
+		case 'G':
+			return '4';
+		case 'H':
+			return '4';
+		case 'I':
+			return '4';
+		default:
+			return getZone(station, stationEndPoint);
+		}
+	}
+	private static char getZone(char station, char stationEndPoint) {
+//		char[] zone3 = {'C','E','F','G','H','I'};
+//		char[] zone2 = {'D','A','B'};
+		String zone3 = "CEFGHI"; //Stations C,E and F are considered in zone 3 for constraints of pricing
+		String zone2 = "DAB";
+		if(zone3.contains(String.valueOf(stationEndPoint))){
+			return '3';
+		}
+		if(zone2.contains(String.valueOf(stationEndPoint))){
+			return '2';
+		}
+		
+		return '?';
+	}
 }
