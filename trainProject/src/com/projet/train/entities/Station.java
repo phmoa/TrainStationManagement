@@ -5,6 +5,7 @@ public class Station {
 	//fields
 	int idCutomer;
 	char idStation;
+	String timeUnix;
 
 	//constructors
 	public Station() {
@@ -38,6 +39,13 @@ public class Station {
 		this.idStation = idStation;
 	}
 	
+	public String getTimeUnix() {
+		return timeUnix;
+	}
+
+	public void setTimeUnix(String timeUnix) {
+		this.timeUnix = timeUnix;
+	}
 	
 
 }

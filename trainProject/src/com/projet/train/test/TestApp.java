@@ -2,7 +2,6 @@ package com.projet.train.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,6 @@ public class TestApp {
 
 		// Verification input (mod2) a devlopper
 
-		// List<Customer> listCustumers = getAllCustomers(text);
 		List<Station> listStations = getAllStationsInformations(text);
 
 		if (listStations != null) {
@@ -34,9 +32,9 @@ public class TestApp {
 				Map<Integer, List<Trip>> listtrips = getListTripsByCustomer(listStationsBycustomer);
 
 				List<Customer> listCustumers = new ArrayList<Customer>();
-				List<Trip> listTrip = new ArrayList<Trip>();
 				Set<Integer> keyCustomer = listtrips.keySet();
 				for (int key : keyCustomer) {
+					List<Trip> listTrip = new ArrayList<Trip>();
 					Customer c = new Customer(key, listTrip);
 					int costTotal = 0;
 					List<Trip> listTrips = listtrips.get(key);
@@ -45,37 +43,63 @@ public class TestApp {
 						costTotal = costTotal + t.getConstInCents();
 					}
 					c.setTotalConstInCents(costTotal);
-					
-					
-					
-					
-
-
+					listCustumers.add(c);
 				}
 
+				// Affichage
+				StringBuilder sb = new StringBuilder();
+				sb.append("{");
+				sb.append("\n");
+				sb.append("\n");
+				sb.append(" \"customerSummaries\" : [ {");
+				for (int i = 0; i < listCustumers.size(); i++) {
+					sb.append("\n");
+					sb.append("\n    \"customerId\" : ").append(listCustumers.get(i).getCustomerId() + ",");
+					sb.append("\n");
+					sb.append("\n    \"totalCostInCents\" : ")
+							.append(listCustumers.get(i).getTotalConstInCents() + ",");
+					sb.append("\n");
+					sb.append("\n");
+					sb.append("   \"trips\" : [ {\n");
+					for (int j = 0; j < listCustumers.get(i).getTrips().size(); j++) {
+						sb.append("\n     \"stationStart\" : ")
+								.append("\"" + listCustumers.get(i).getTrips().get(j).getStationStart() + "\",");
+						sb.append("\n");
+						sb.append("\n     \"stationEnd\" : ")
+								.append("\"" + listCustumers.get(i).getTrips().get(j).getStationEnd() + "\",");
+						sb.append("\n");
+						sb.append("\n     \"startedJourneyAt\" : ").append(listCustumers.get(i).getTrips().get(j).getStartedJourneyAt() + ",");
+						sb.append("\n");
+						sb.append("\n     \"costInCents\" : ")
+								.append(listCustumers.get(i).getTrips().get(j).getConstInCents() + ",");
+						sb.append("\n");
+						sb.append("\n     \"zoneFrom\" : ")
+								.append(listCustumers.get(i).getTrips().get(j).getZoneFrom() + ",");
+						sb.append("\n");
+						sb.append("\n     \"zoneTo\" : ").append(listCustumers.get(i).getTrips().get(j).getZoneTo());
+						sb.append("\n");
+						if (j == listCustumers.get(i).getTrips().size() - 1) {
+							sb.append("\n   } ]");
+						} else {
+							sb.append("\n   }, { \n");
+						}
+					}
+					if (i == listCustumers.size() - 1) {
+					} else {
+						sb.append("\n");
+						sb.append("\n }, {");
+					}
+				}
+				sb.append("\n");
+				sb.append(" } ]");
+				sb.append("\n");
+				sb.append("\n");
+				sb.append("}");
+				System.out.println(sb);
 			}
 		}
-	
-	
-	
-	
-	
-	
-	
- 
-		// try-with-resources statement based on post comment below :)
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	}
 
-	// contruct list customer for the output
+	}
 
 	// construct list trips by customer
 	private static Map<Integer, List<Trip>> getListTripsByCustomer(Map<Integer, List<Station>> listStationsBycustomer) {
@@ -91,6 +115,7 @@ public class TestApp {
 			char zoneStart = ' ';
 			char zoneEnd = ' ';
 			int tripCost = 0;
+			String startedJourneyAt = "";
 
 			for (int i = 0; i < liststations.size(); i++) {
 
@@ -101,6 +126,7 @@ public class TestApp {
 				if (!isStationStartSetted && !isStationEndSetted) {
 					stationStart = liststations.get(i).getIdStation();
 					isStationStartSetted = true;
+					startedJourneyAt = liststations.get(i).getTimeUnix();
 				}
 				if (isStationStartSetted && isStationEndSetted) {
 					// get the Zone
@@ -110,7 +136,7 @@ public class TestApp {
 					// get the price of the trip
 					tripCost = getTripCost(zoneStart, zoneEnd);
 
-					Trip t = new Trip(key, stationStart, stationEnd, tripCost, zoneStart, zoneEnd);
+					Trip t = new Trip(key, stationStart, stationEnd, startedJourneyAt, tripCost, zoneStart, zoneEnd);
 					listTrips.add(t);
 					isStationStartSetted = false;
 					isStationEndSetted = false;
@@ -140,6 +166,7 @@ public class TestApp {
 		List<Station> listStations = new ArrayList<Station>();
 		Scanner scnr = new Scanner(text);
 		int index = 0;
+		String time = "";
 		while (scnr.hasNextLine()) {
 			String line = scnr.nextLine();
 
@@ -150,11 +177,13 @@ public class TestApp {
 				listStations.add(new Station(Integer.parseInt(lineSplit[1].replace(" ", "").replace(",", ""))));
 			}
 			if (line.contains("unixTimestamp")) {
-
+				String[] lineSplit = line.split(":");
+				time = lineSplit[1].replaceAll(",", "");
 			}
 			if (line.contains("station")) {
 				String[] lineSplit = line.split(":");
 				listStations.get(index).setIdStation(lineSplit[1].charAt(2));
+				listStations.get(index).setTimeUnix(time);
 				index++;
 			}
 		}
@@ -238,4 +267,5 @@ public class TestApp {
 		}
 		return 0;
 	}
+
 }

@@ -6,7 +6,7 @@ public class Trip {
 	int custumerId;
 	char stationStart;
 	char stationEnd;
-	String startedJourneyAt;//convertir vers type date !!!!!
+	String startedJourneyAt;
 	int constInCents;
 	char zoneFrom;
 	char zoneTo;
