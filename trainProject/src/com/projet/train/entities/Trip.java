@@ -16,45 +16,6 @@ public class Trip {
 	public Trip() {
 		super();
 	}
-	
-	
-
-	public Trip(int custumerId) {
-		super();
-		this.custumerId = custumerId;
-	}
-
-	public Trip(int custumerId, char stationStart, char stationEnd) {
-		super();
-		this.custumerId = custumerId;
-		this.stationStart = stationStart;
-		this.stationEnd = stationEnd;
-	}
-	
-
-
-	public Trip(int custumerId, char stationStart, char stationEnd, char zoneFrom, char zoneTo) {
-		super();
-		this.custumerId = custumerId;
-		this.stationStart = stationStart;
-		this.stationEnd = stationEnd;
-		this.zoneFrom = zoneFrom;
-		this.zoneTo = zoneTo;
-	}
-
-
-
-	public Trip(int custumerId, char stationStart, char stationEnd, int constInCents, char zoneFrom, char zoneTo) {
-		super();
-		this.custumerId = custumerId;
-		this.stationStart = stationStart;
-		this.stationEnd = stationEnd;
-		this.constInCents = constInCents;
-		this.zoneFrom = zoneFrom;
-		this.zoneTo = zoneTo;
-	}
-
-
 
 	public Trip(int custumerId, char stationStart, char stationEnd, String startedJourneyAt, int constInCents,
 			char zoneFrom, char zoneTo) {

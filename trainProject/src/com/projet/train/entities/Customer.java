@@ -8,7 +8,6 @@ public class Customer {
 	int customerId;
 	int totalConstInCents;
 	List<Trip> trips;
-	
 	char station;
 	
 	//constructors
@@ -16,17 +15,6 @@ public class Customer {
 		super();
 	}
 
-	public Customer(int customerId) {
-		super();
-		this.customerId = customerId;
-	}
-	
-	public Customer(char station) {
-		super();
-		this.station = station;
-	}
-
-	
 	public Customer(int customerId, List<Trip> trips) {
 		super();
 		this.customerId = customerId;

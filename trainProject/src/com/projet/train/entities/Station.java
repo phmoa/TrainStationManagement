@@ -12,12 +12,6 @@ public class Station {
 		super();
 	}
 
-	public Station(char idStation) {
-		super();
-		this.idStation = idStation;
-	}
-
-
 	public Station(int idCutomer) {
 		super();
 		this.idCutomer = idCutomer;
