@@ -29,17 +29,16 @@ public class ApplicationMain {
 
 		File inFile = null;
 		try {
-			if (0 < args.length) {
+			if (args.length == 2) {
 				inFile = new File(args[0]);
 			} else {
 				System.out.println("Invalid input arguments");
 				System.exit(0);
 			}
-//			 inFile = new File("C:\\Users\\bborchani\\Desktop\\Work\\testIn.txt");
 		} catch (Exception e) {
 			System.out.println("Problem occured while reading the input file");
 		}
-		
+
 		List<Station> listStations = ZonesUtils.getAllStationsInformations(inFile);
 		if (listStations != null) {
 			Map<Integer, List<Station>> listStationsBycustomer = ZonesUtils.getStationsByCustomer(listStations);
@@ -60,9 +59,7 @@ public class ApplicationMain {
 						c.setTotalConstInCents(costTotal);
 						listCustumers.add(c);
 					}
-
-					String result = createJsonResponse(listCustumers);
-
+					String result = ProjectUtils.createJsonResponse(listCustumers);
 					// Create result file
 					try {
 						File file = new File(args[1]);
@@ -92,47 +89,5 @@ public class ApplicationMain {
 				System.exit(0);
 			}
 		}
-
 	}
-
-	private static String createJsonResponse(List<Customer> listCustumers) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(ProjectUtils.JSON_HEADER);
-		for (int i = 0; i < listCustumers.size(); i++) {
-			sb.append(ProjectUtils.JSON_CUSTOMER_ID).append(listCustumers.get(i).getCustomerId() + ProjectUtils.COMMA);
-			sb.append(ProjectUtils.JSON_TOTAL_COST_IN_CENT)
-					.append(listCustumers.get(i).getTotalConstInCents() + ProjectUtils.COMMA);
-			sb.append(ProjectUtils.JSON_TRIPS);
-			for (int j = 0; j < listCustumers.get(i).getTrips().size(); j++) {
-				sb.append(ProjectUtils.JSON_STATION_START).append(ProjectUtils.QUOTE
-						+ listCustumers.get(i).getTrips().get(j).getStationStart() + ProjectUtils.SLASH_COMMA);
-				sb.append(ProjectUtils.JSON_STATION_END).append(ProjectUtils.QUOTE
-						+ listCustumers.get(i).getTrips().get(j).getStationEnd() + ProjectUtils.SLASH_COMMA);
-				sb.append(ProjectUtils.JSON_STARTED_JOURNEY_AT)
-						.append(listCustumers.get(i).getTrips().get(j).getStartedJourneyAt() + ProjectUtils.COMMA);
-				sb.append(ProjectUtils.JSON_COST_IN_CENTS)
-						.append(listCustumers.get(i).getTrips().get(j).getConstInCents() + ProjectUtils.COMMA);
-				sb.append(ProjectUtils.JSON_ZONE_FROM)
-						.append(listCustumers.get(i).getTrips().get(j).getZoneFrom() + ProjectUtils.COMMA);
-				sb.append(ProjectUtils.JSON_ZONE_TO)
-						.append(listCustumers.get(i).getTrips().get(j).getZoneTo() + ProjectUtils.LINE_BREAK);
-				if (j == listCustumers.get(i).getTrips().size() - 1) {
-					sb.append(ProjectUtils.JSON_END_TRIP);
-				} else {
-					sb.append(ProjectUtils.JSON_NEXT_TRIP);
-
-				}
-			}
-			if (i != listCustumers.size() - 1) {
-				sb.append(ProjectUtils.JSON_NEXT_CUSTOMER);
-
-			}
-		}
-		sb.append(ProjectUtils.JSON_END);
-		return sb.toString();
-
-	}
-
-
-
 }

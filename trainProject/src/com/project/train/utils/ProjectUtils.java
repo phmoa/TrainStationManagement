@@ -1,5 +1,9 @@
 package com.project.train.utils;
 
+import java.util.List;
+
+import com.project.train.entities.Customer;
+
 public class ProjectUtils {
 
 	// inputs keys
@@ -45,6 +49,41 @@ public class ProjectUtils {
 	public final static String JSON_NEXT_CUSTOMER = "\n\n }, {";
 	public final static String JSON_END= "\n\n } ]\n\n}";
 
+	public static String createJsonResponse(List<Customer> listCustumers) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(ProjectUtils.JSON_HEADER);
+		for (int i = 0; i < listCustumers.size(); i++) {
+			sb.append(ProjectUtils.JSON_CUSTOMER_ID).append(listCustumers.get(i).getCustomerId() + ProjectUtils.COMMA);
+			sb.append(ProjectUtils.JSON_TOTAL_COST_IN_CENT)
+					.append(listCustumers.get(i).getTotalConstInCents() + ProjectUtils.COMMA);
+			sb.append(ProjectUtils.JSON_TRIPS);
+			for (int j = 0; j < listCustumers.get(i).getTrips().size(); j++) {
+				sb.append(ProjectUtils.JSON_STATION_START).append(ProjectUtils.QUOTE
+						+ listCustumers.get(i).getTrips().get(j).getStationStart() + ProjectUtils.SLASH_COMMA);
+				sb.append(ProjectUtils.JSON_STATION_END).append(ProjectUtils.QUOTE
+						+ listCustumers.get(i).getTrips().get(j).getStationEnd() + ProjectUtils.SLASH_COMMA);
+				sb.append(ProjectUtils.JSON_STARTED_JOURNEY_AT)
+						.append(listCustumers.get(i).getTrips().get(j).getStartedJourneyAt() + ProjectUtils.COMMA);
+				sb.append(ProjectUtils.JSON_COST_IN_CENTS)
+						.append(listCustumers.get(i).getTrips().get(j).getConstInCents() + ProjectUtils.COMMA);
+				sb.append(ProjectUtils.JSON_ZONE_FROM)
+						.append(listCustumers.get(i).getTrips().get(j).getZoneFrom() + ProjectUtils.COMMA);
+				sb.append(ProjectUtils.JSON_ZONE_TO)
+						.append(listCustumers.get(i).getTrips().get(j).getZoneTo() + ProjectUtils.LINE_BREAK);
+				if (j == listCustumers.get(i).getTrips().size() - 1) {
+					sb.append(ProjectUtils.JSON_END_TRIP);
+				} else {
+					sb.append(ProjectUtils.JSON_NEXT_TRIP);
 
+				}
+			}
+			if (i != listCustumers.size() - 1) {
+				sb.append(ProjectUtils.JSON_NEXT_CUSTOMER);
+
+			}
+		}
+		sb.append(ProjectUtils.JSON_END);
+		return sb.toString();
+	}
 
 }
