@@ -1,4 +1,4 @@
-package com.projet.train.test;
+package com.project.train.test;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,10 +17,10 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.projet.train.entities.Customer;
-import com.projet.train.entities.Station;
-import com.projet.train.entities.Trip;
-import com.projet.train.utils.ProjectUtils;
+import com.project.train.entities.Customer;
+import com.project.train.entities.Station;
+import com.project.train.entities.Trip;
+import com.project.train.utils.ProjectUtils;
 
 public class TestApp {
 	static StringBuilder log = new StringBuilder();
@@ -33,8 +33,6 @@ public class TestApp {
 		s.append("ressources");
 		URI uri = new URI(s.toString());
 		List<Path> files = Files.walk(Paths.get(uri)).filter(Files::isRegularFile).collect(Collectors.toList());
-		// files.add(currentRelativePath); // to test the case where there is not a file
-
 		log.append("start testing : \n\n");
 		for (Path inFile : files) {
 			log.append("testing for : " + inFile.getFileName() + "\n");
@@ -64,7 +62,6 @@ public class TestApp {
 					} else {
 						log.append("Unknower station or trips ok\n\n");
 					}
-
 				}
 			}
 

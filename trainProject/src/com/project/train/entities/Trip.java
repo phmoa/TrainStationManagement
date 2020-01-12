@@ -1,4 +1,4 @@
-package com.projet.train.entities;
+package com.project.train.entities;
 
 public class Trip {
 
