@@ -34,7 +34,7 @@ public class ProjectUtils {
 	public final static String SLASH_COMMA = "\",";
 	public final static String LINE_BREAK = "\n";
 	
-	public final static String JSON_HEADER = "{{\n\n \"customerSummaries\" : [ {";
+	public final static String JSON_HEADER = "{\n\n \"customerSummaries\" : [ {";
 	public final static String JSON_CUSTOMER_ID = "\n\n    \"customerId\" : ";
 	public final static String JSON_TOTAL_COST_IN_CENT = "\n\n    \"totalCostInCents\" : ";
 	public final static String JSON_TRIPS = "\n\n   \"trips\" : [ {\n";
